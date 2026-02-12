@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>💗 3D Valentine · BB Piru 💗</title>
+  
+  <!-- Three.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- Font & basic styling -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Quicksand', sans-serif;
+      background-color: #1a0b0e;
+      color: white;
+    }
+    
+    /* Canvas fills background */
+    canvas {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+    
+    /* Everything is layered above canvas */
+    .content {
+      position: relative;
+      z-index: 10;
+      width: 100vw;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+    
+    .lock-screen, .valentine-container {
+      pointer-events: auto;
+    }
+    
+    /* ---------- LOCK SCREEN — no hint, no placeholder ---------- */
+    .lock-screen {
+      background: rgba(25, 12, 20, 0.75);
+      backdrop-filter: blur(16px) brightness(1.2);
+      -webkit-backdrop-filter: blur(16px) brightness(1.2);
+      border-radius: 70px 70px 70px 70px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 0 3px rgba(255, 200, 220, 0.5), 0 0 30px #ff99aa;
+      padding: 3rem 2.8rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      border: 2px solid rgba(255, 170, 200, 0.7);
+      transition: 0.3s;
+    }
+    
+    .lock-screen h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #ffe3ec;
+      text-shadow: 0 0 12px #ff5e7c, 0 0 30px #ffb6c1, 4px 4px 0 #882d4a;
+      margin-bottom: 30px;
+      letter-spacing: 6px;
+    }
+    
+    .password-box {
+      background: rgba(30, 10, 18, 0.7);
+      border-radius: 100px;
+      padding: 6px 6px 6px 30px;
+      display: flex;
+      align-items: center;
+      border: 3px solid #ff90a8;
+      box-shadow: inset 0 0 15px #ff3b6f, 0 8px 0 #6b2e3e, 0 12px 30px black;
+      margin: 30px 0 20px;
+    }
+    
+    .password-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 18px 5px;
+      font-size: 1.3rem;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      color: #fff0f2;
+      outline: none;
+      letter-spacing: 2px;
+    }
+    
+    .password-box input::placeholder {
+      color: transparent;
+    }
+    
+    .btn-unlock {
+      background: #ff4d6d;
+      border: none;
+      border-radius: 60px;
+      padding: 18px 42px;
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 6px;
+      border: 4px solid #fff5f7;
+      box-shadow: 0 12px 0 #712c3a, 0 15px 30px #00000060;
+      cursor: pointer;
+      transition: 0.07s linear;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      text-shadow: 2px 2px 0 #4a1e26;
+    }
+    
+    .btn-unlock:active {
+      transform: translateY(12px);
+      box-shadow: 0 3px 0 #712c3a, 0 15px 30px black;
+    }
+    
+    /* NO HINT TEXT — completely removed */
+    
+    /* ---------- VALENTINE CARD — 3D hearts underneath, super cute ---------- */
+    .valentine-container {
+      display: none;
+      position: relative;
+      max-width: 900px;
+      width: 100%;
+      background: rgba(40, 15, 25, 0.6);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border-radius: 100px 100px 100px 100px;
+      padding: 3.5rem 3rem;
+      box-shadow: 0 40px 70px rgba(0,0,0,0.7), 0 0 0 6px rgba(255, 160, 190, 0.7), 0 0 60px #ff7a9e;
+      border: 2px solid rgba(255, 220, 240, 0.9);
+      text-align: center;
+      animation: floatIn 0.8s cubic-bezier(0.22, 1.2, 0.36, 1);
+    }
+    
+    @keyframes floatIn {
+      0% { opacity: 0; transform: scale(0.7) translateY(60px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    
+    .heart-deco {
+      font-size: 4rem;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 20px crimson);
+    }
+    
+    .big-question {
+      font-size: 3.8rem;
+      font-weight: 800;
+      color: #fff5f5;
+      text-shadow: 6px 6px 0 #b32e4a, 0 0 30px #ffb6b6;
+      margin: 10px 0 5px;
+      line-height: 1.2;
+    }
+    
+    .bb-piru {
+      background: linear-gradient(45deg, #ffd3dc, #ffe6f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 30px #ff9eb5, 0 0 60px #ff3b6f;
+      font-size: 4.2rem;
+      display: inline-block;
+      font-weight: 900;
+      letter-spacing: 6px;
+    }
+    
+    .cute-extra {
+      font-size: 2rem;
+      background: rgba(255, 140, 170, 0.5);
+      padding: 12px 24px;
+      border-radius: 100px;
+      display: inline-block;
+      margin: 20px auto 10px;
+      border: 4px dashed #fff2f2;
+      backdrop-filter: blur(8px);
+      color: #fff8ed;
+      font-weight: 700;
+    }
+    
+    .button-pair {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 70px;
+      margin-top: 50px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    
+    .yes-btn {
+      background: #ff3b5c;
+      border: 8px solid #ffeef2;
+      color: white;
+      font-size: 2.8rem;
+      font-weight: 900;
+      padding: 20px 50px;
+      border-radius: 200px;
+      box-shadow: 0 18px 0 #712c3a, 0 20px 50px #ff4d6d;
+      cursor: pointer;
+      transition: 0.08s ease;
+      letter-spacing: 10px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-shadow: 4px 4px 0 #4a1e2c;
+    }
+    
+    /* YES BUTTON HOVER HIGHLIGHT - super cute */
+    .yes-btn:hover {
+      background: #ff1a4c;
+      transform: scale(1.1);
+      box-shadow: 0 18px 0 #712c3a, 0 0 30px #ffb6c1, 0 0 80px #ff4d6d;
+      border-color: #fff9fb;
+      text-shadow: 4px 4px 0 #4a1e2c, 0 0 20px white;
+    }
+    
+    .yes-btn:active {
+      transform: translateY(18px);
+      box-shadow: 0 5px 0 #712c3a, 0 20px 50px #ff4d6d;
+    }
+    
+    .no-btn {
+      background: #594651;
+      border: 6px solid #ffd9e2;
+      color: #ffecf0;
+      font-size: 2.5rem;
+      font-weight: 800;
+      padding: 18px 46px;
+      border-radius: 200px;
+      box-shadow: 0 14px 0 #38262e, 0 20px 40px #1a1113;
+      cursor: pointer;
+      transition: 0.02s linear;
+      letter-spacing: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      text-shadow: 2px 2px 0 #2d1e23;
+    }
+    
+    /* celebration area — hidden until YES */
+    .thank-you-message {
+      margin-top: 40px;
+      font-size: 2.5rem;
+      background: rgba(255, 215, 220, 0.85);
+      backdrop-filter: blur(20px);
+      padding: 25px 30px;
+      border-radius: 120px;
+      color: #9f2b46;
+      font-weight: 900;
+      display: none;
+      border: 8px solid white;
+      box-shadow: 0 0 60px hotpink;
+      text-shadow: 2px 2px 0 white;
+      letter-spacing: 2px;
+      animation: shimmer 2s infinite alternate;
+    }
+    
+    @keyframes shimmer {
+      0% { box-shadow: 0 0 30px #ff8da1, 0 0 60px white; }
+      100% { box-shadow: 0 0 60px #ffc0cb, 0 0 100px #ffb3c6; }
+    }
+    
+    .show-thanks {
+      display: block;
+    }
+    
+    /* responsive */
+    @media (max-width: 700px) {
+      .lock-screen { padding: 2rem; }
+      .big-question { font-size: 2.8rem; }
+      .bb-piru { font-size: 3.2rem; }
+      .yes-btn { font-size: 2rem; padding: 16px 30px; }
+      .no-btn { font-size: 1.8rem; padding: 14px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Three.js canvas automatically inserted -->
+
+  <!-- UI overlay -->
+  <div class="content">
+    <!-- 🔐 PASSWORD SCREEN — no hint, no placeholder text -->
+    <div id="lockScreen" class="lock-screen">
+      <h1>💘 secret 💘</h1>
+      <div style="font-size: 2.8rem; margin-bottom: 20px;">🐻✨🍰</div>
+      <div class="password-box">
+        <input type="password" id="passwordInput" placeholder="" autofocus>
+      </div>
+      <button class="btn-unlock" id="unlockBtn">
+        <span>🔓</span> open <span>💗</span>
+      </button>
+      <!-- hint completely removed -->
+    </div>
+
+    <!-- 💖 VALENTINE PROPOSAL (hidden at start) -->
+    <div id="valentineContent" class="valentine-container">
+      <div class="heart-deco">
+        💗 💖 💘
+      </div>
+      <div class="big-question">
+        Will you be my Valentine,
+      </div>
+      <div class="bb-piru">
+        BB Piru?
+      </div>
+      <!-- CHANGED: "with extra sprinkles" → "with extra kisses" (same emoji) -->
+      <div class="cute-extra">
+        🧸🌸 with extra kisses 🌸🧸
+      </div>
+
+      <!-- YES / NO buttons -->
+      <div class="button-pair">
+        <button id="yesButton" class="yes-btn">
+          💞 YES
+        </button>
+        <button id="noButton" class="no-btn">
+          no 💔
+        </button>
+      </div>
+
+      <!-- THANK YOU MESSAGE – shown only after YES -->
+      <div id="thankYouMessage" class="thank-you-message">
+        💗✨ Thank you for being my Valentine! ✨💗<br>
+        <span style="font-size: 2rem;">💋💋💋 🥰 🩷</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      // ---------- FIXED PASSWORD PROTECTION (NO HINT) ----------
+      const CORRECT_PW = "paintmyface69";
+      const lockScreen = document.getElementById('lockScreen');
+      const valentineDiv = document.getElementById('valentineContent');
+      const unlockBtn = document.getElementById('unlockBtn');
+      const passwordInput = document.getElementById('passwordInput');
+
+      // Make sure valentine is hidden initially
+      valentineDiv.style.display = 'none';
+      
+      unlockBtn.addEventListener('click', function() {
+        const entered = passwordInput.value.trim();
+        if (entered === CORRECT_PW) {
+          lockScreen.style.display = 'none';
+          valentineDiv.style.display = 'block';
+        } else {
+          alert('🔒 wrong password');
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
+      });
+
+      passwordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          unlockBtn.click();
+        }
+      });
+
+      // ---------- THREE.JS – 3D HEART BACKGROUND (aesthetic) ----------
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x1a0b0e); // deep romantic burgundy
+      
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 20;
+      camera.position.y = 2;
+      
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.setPixelRatio(window.devicePixelRatio);
+      document.body.appendChild(renderer.domElement);
+      
+      // --- LIGHTS ---
+      const ambientLight = new THREE.AmbientLight(0xffccdd);
+      ambientLight.intensity = 0.6;
+      scene.add(ambientLight);
+      
+      const mainLight = new THREE.PointLight(0xffa5b0, 1.5);
+      mainLight.position.set(10, 10, 20);
+      mainLight.castShadow = true;
+      mainLight.receiveShadow = true;
+      scene.add(mainLight);
+      
+      const backLight = new THREE.PointLight(0xff6f8f, 0.8);
+      backLight.position.set(-10, 0, -20);
+      scene.add(backLight);
+      
+      const fillLight = new THREE.PointLight(0xffb6c1, 0.6);
+      fillLight.position.set(0, -5, 15);
+      scene.add(fillLight);
+      
+      // --- CREATE FLOATING 3D HEARTS ---
+      function createHeart(color, size, x, y, z) {
+        const group = new THREE.Group();
+        
+        const sphereMat = new THREE.MeshStandardMaterial({
+          color: color,
+          emissive: new THREE.Color(0x550033),
+          emissiveIntensity: 0.3,
+          roughness: 0.3,
+          metalness: 0.1,
+          transparent: true,
+          opacity: 0.92
+        });
+        
+        const sphereGeom = new THREE.SphereGeometry(size * 0.7, 32, 16);
+        
+        const leftSphere = new THREE.Mesh(sphereGeom, sphereMat);
+        leftSphere.position.x = -size * 0.7;
+        leftSphere.position.y = size * 0.3;
+        group.add(leftSphere);
+        
+        const rightSphere = new THREE.Mesh(sphereGeom, sphereMat);
+        rightSphere.position.x = size * 0.7;
+        rightSphere.position.y = size * 0.3;
+        group.add(rightSphere);
+        
+        const coneMat = new THREE.MeshStandardMaterial({
+          color: color,
+          emissive: new THREE.Color(0x440022),
+          emissiveIntensity: 0.3,
+          roughness: 0.4,
+          metalness: 0.1,
+          transparent: true,
+          opacity: 0.95
+        });
+        const coneGeom = new THREE.ConeGeometry(size * 0.7, size * 1.2, 32);
+        const cone = new THREE.Mesh(coneGeom, coneMat);
+        cone.rotation.x = Math.PI;
+        cone.position.y = -size * 0.5;
+        group.add(cone);
+        
+        const highlight = new THREE.Mesh(
+          new THREE.SphereGeometry(size * 0.15, 16, 16),
+          new THREE.MeshStandardMaterial({ color: 0xfff0f5, emissive: 0xffaabb, emissiveIntensity: 0.4 })
+        );
+        highlight.position.y = size * 0.9;
+        highlight.position.x = 0;
+        group.add(highlight);
+        
+        group.position.set(x, y, z);
+        group.rotation.z = Math.random() * Math.PI * 2;
+        group.rotation.x = (Math.random() - 0.5) * 0.5;
+        group.rotation.y = (Math.random() - 0.5) * 0.5;
+        
+        return group;
+      }
+      
+      const heartColors = [0xffa5b0, 0xff809a, 0xff6f8f, 0xff5e7c, 0xff4d6d, 0xffa07a, 0xffb3c6, 0xffc0cb];
+      
+      const heartsGroup = new THREE.Group();
+      const heartCount = 45;
+      
+      for (let i = 0; i < heartCount; i++) {
+        const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+        const size = Math.random() * 0.8 + 0.4;
+        const x = (Math.random() - 0.5) * 70;
+        const y = (Math.random() - 0.5) * 50;
+        const z = (Math.random() - 0.5) * 60 - 20;
+        const heart = createHeart(color, size, x, y, z);
+        
+        heart.userData = {
+          speedX: (Math.random() - 0.5) * 0.02,
+          speedY: (Math.random() - 0.5) * 0.02 + 0.005,
+          speedZ: (Math.random() - 0.5) * 0.01,
+          rotSpeed: (Math.random() - 0.5) * 0.01,
+          baseX: x,
+          baseY: y,
+          baseZ: z
+        };
+        
+        heartsGroup.add(heart);
+      }
+      
+      scene.add(heartsGroup);
+      
+      const sparkleGroup = new THREE.Group();
+      for (let i = 0; i < 200; i++) {
+        const geom = new THREE.SphereGeometry(0.06, 6, 6);
+        const mat = new THREE.MeshStandardMaterial({ 
+          color: 0xffddee, 
+          emissive: 0xff8aa1, 
+          emissiveIntensity: 0.5,
+          transparent: true,
+          opacity: 0.8
+        });
+        const spark = new THREE.Mesh(geom, mat);
+        spark.position.x = (Math.random() - 0.5) * 100;
+        spark.position.y = (Math.random() - 0.5) * 80;
+        spark.position.z = (Math.random() - 0.5) * 100 - 30;
+        spark.userData = {
+          speedY: Math.random() * 0.01 + 0.005,
+          baseY: spark.position.y
+        };
+        sparkleGroup.add(spark);
+      }
+      scene.add(sparkleGroup);
+      
+      scene.fog = new THREE.FogExp2(0x1a0b0e, 0.02);
+      
+      // ---- HEART SHOWER (for YES celebration) ----
+      const showerHearts = [];
+      function createShowerHeart() {
+        const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+        const size = Math.random() * 0.6 + 0.3;
+        const heart = createHeart(color, size, 0, 0, 0);
+        heart.position.x = (Math.random() - 0.5) * 60;
+        heart.position.y = 40 + Math.random() * 30;
+        heart.position.z = (Math.random() - 0.5) * 50 - 10;
+        heart.userData = {
+          velocityY: -Math.random() * 0.2 - 0.15,
+          velocityX: (Math.random() - 0.5) * 0.05,
+          velocityZ: (Math.random() - 0.5) * 0.05,
+          rotSpeed: (Math.random() - 0.5) * 0.03,
+          initialY: 40 + Math.random() * 30
+        };
+        return heart;
+      }
+      
+      window.startHeartShower = function() {
+        for (let i = 0; i < 60; i++) {
+          const h = createShowerHeart();
+          showerHearts.push(h);
+          scene.add(h);
+        }
+        
+        for (let i = 0; i < 100; i++) {
+          const geom = new THREE.SphereGeometry(0.1, 4, 4);
+          const mat = new THREE.MeshStandardMaterial({ color: 0xffb3c6, emissive: 0xff4d6d, emissiveIntensity: 0.4 });
+          const kiss = new THREE.Mesh(geom, mat);
+          kiss.position.x = (Math.random() - 0.5) * 80;
+          kiss.position.y = (Math.random() - 0.5) * 60 + 40;
+          kiss.position.z = (Math.random() - 0.5) * 60 - 10;
+          kiss.userData = { velocityY: -Math.random() * 0.25 - 0.2 };
+          showerHearts.push(kiss);
+          scene.add(kiss);
+        }
+      };
+      
+      function animate() {
+        requestAnimationFrame(animate);
+        
+        heartsGroup.children.forEach((heart) => {
+          if (heart.userData) {
+            heart.position.x += heart.userData.speedX;
+            heart.position.y += heart.userData.speedY;
+            heart.position.z += heart.userData.speedZ;
+            heart.rotation.y += heart.userData.rotSpeed;
+            heart.rotation.x += heart.userData.rotSpeed * 0.5;
+            
+            if (heart.position.y > 35) heart.position.y = -25;
+            if (heart.position.y < -30) heart.position.y = 30;
+            if (heart.position.x > 45) heart.position.x = -45;
+            if (heart.position.x < -45) heart.position.x = 45;
+            if (heart.position.z > 40) heart.position.z = -40;
+            if (heart.position.z < -60) heart.position.z = 20;
+          }
+        });
+        
+        sparkleGroup.children.forEach((spark) => {
+          spark.position.y += spark.userData.speedY;
+          if (spark.position.y > 50) spark.position.y = -40;
+        });
+        
+        showerHearts.forEach((item) => {
+          if (item.userData) {
+            item.position.y += item.userData.velocityY;
+            item.position.x += item.userData.velocityX || 0;
+            item.position.z += item.userData.velocityZ || 0;
+            item.rotation.x += 0.02;
+            item.rotation.z += 0.03;
+            
+            if (item.position.y < -40) {
+              item.position.y = 50 + Math.random() * 30;
+              item.position.x = (Math.random() - 0.5) * 70;
+              item.position.z = (Math.random() - 0.5) * 60;
+            }
+          }
+        });
+        
+        renderer.render(scene, camera);
+      }
+      
+      animate();
+      
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      // ---------- VALENTINE INTERACTION: YES + RUNAWAY NO ----------
+      const yesBtn = document.getElementById('yesButton');
+      const noBtn = document.getElementById('noButton');
+      const thankYouMsg = document.getElementById('thankYouMessage');
+
+      yesBtn.addEventListener('click', function() {
+        thankYouMsg.classList.add('show-thanks');
+        
+        if (window.startHeartShower) window.startHeartShower();
+        
+        yesBtn.style.transform = 'scale(1.3)';
+        yesBtn.style.background = '#ff1a4c';
+        yesBtn.style.boxShadow = '0 18px 0 #4f1e28, 0 0 60px #ffb6c1';
+        yesBtn.innerHTML = '💖 YAY!!! 💖';
+        
+        noBtn.style.display = 'none';
+        
+        for (let i = 0; i < 30; i++) {
+          const kiss = document.createElement('span');
+          kiss.innerText = '💋';
+          kiss.style.position = 'fixed';
+          kiss.style.left = Math.random() * 100 + '%';
+          kiss.style.top = Math.random() * 100 + '%';
+          kiss.style.fontSize = (Math.random() * 40 + 30) + 'px';
+          kiss.style.opacity = Math.random() * 0.8 + 0.3;
+          kiss.style.zIndex = '9999';
+          kiss.style.pointerEvents = 'none';
+          kiss.style.animation = `floatKiss ${Math.random() * 4 + 3}s infinite`;
+          document.body.appendChild(kiss);
+          
+          setTimeout(() => { kiss.remove(); }, 5000);
+        }
+      });
+
+      // ---------- RUNAWAY NO BUTTON ----------
+      noBtn.addEventListener('mouseenter', runaway);
+      noBtn.addEventListener('mousemove', runaway);
+      noBtn.addEventListener('touchstart', runawayTouch);
+      
+      function runaway(e) {
+        if (e) e.preventDefault();
+        if (noBtn.style.display === 'none') return;
+        
+        if (noBtn.style.position !== 'relative') {
+          noBtn.style.position = 'relative';
+          noBtn.style.left = '0px';
+          noBtn.style.top = '0px';
+        }
+        
+        let currentLeft = parseFloat(noBtn.style.left) || 0;
+        let currentTop = parseFloat(noBtn.style.top) || 0;
+        
+        const container = valentineDiv.getBoundingClientRect();
+        const maxX = container.width * 0.35;
+        const maxY = container.height * 0.3;
+        
+        let deltaX = (Math.random() * 300 + 150) * (Math.random() < 0.5 ? 1 : -1);
+        let deltaY = (Math.random() * 250 + 120) * (Math.random() < 0.5 ? 1 : -1);
+        
+        let newLeft = currentLeft + deltaX;
+        let newTop = currentTop + deltaY;
+        
+        newLeft = Math.min(Math.max(newLeft, -maxX), maxX);
+        newTop = Math.min(Math.max(newTop, -maxY), maxY);
+        
+        noBtn.style.left = newLeft + 'px';
+        noBtn.style.top = newTop + 'px';
+        noBtn.style.background = '#a65e72';
+        noBtn.style.borderColor = '#ffced8';
+      }
+      
+      function runawayTouch(e) {
+        e.preventDefault();
+        runaway(e);
+      }
+      
+      noBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('😘 nice try! you cannot catch NO!');
+      });
+
+      const styleSheet = document.createElement("style");
+      styleSheet.innerHTML = `
+        @keyframes floatKiss {
+          0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+          100% { transform: translateY(-200px) rotate(30deg); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(styleSheet);
+      
+    })();
+  </script>
+</body>
+</html>
