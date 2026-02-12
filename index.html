@@ -125,9 +125,7 @@
       box-shadow: 0 3px 0 #712c3a, 0 15px 30px black;
     }
     
-    /* NO HINT TEXT — completely removed */
-    
-    /* ---------- VALENTINE CARD — 3D hearts underneath, super cute ---------- */
+    /* ---------- VALENTINE CARD — super cute ---------- */
     .valentine-container {
       display: none;
       position: relative;
@@ -280,7 +278,6 @@
       display: block;
     }
     
-    /* responsive */
     @media (max-width: 700px) {
       .lock-screen { padding: 2rem; }
       .big-question { font-size: 2.8rem; }
@@ -296,7 +293,7 @@
 
   <!-- UI overlay -->
   <div class="content">
-    <!-- 🔐 PASSWORD SCREEN — no hint, no placeholder text -->
+    <!-- 🔐 PASSWORD SCREEN — no hint, no placeholder -->
     <div id="lockScreen" class="lock-screen">
       <h1>💘 secret 💘</h1>
       <div style="font-size: 2.8rem; margin-bottom: 20px;">🐻✨🍰</div>
@@ -306,7 +303,6 @@
       <button class="btn-unlock" id="unlockBtn">
         <span>🔓</span> open <span>💗</span>
       </button>
-      <!-- hint completely removed -->
     </div>
 
     <!-- 💖 VALENTINE PROPOSAL (hidden at start) -->
@@ -320,7 +316,7 @@
       <div class="bb-piru">
         BB Piru?
       </div>
-      <!-- CHANGED: "with extra sprinkles" → "with extra kisses" (same emoji) -->
+      <!-- Changed to "with extra kisses" -->
       <div class="cute-extra">
         🧸🌸 with extra kisses 🌸🧸
       </div>
@@ -347,14 +343,13 @@
     (function() {
       "use strict";
 
-      // ---------- FIXED PASSWORD PROTECTION (NO HINT) ----------
+      // ---------- PASSWORD PROTECTION (NO HINT) ----------
       const CORRECT_PW = "paintmyface69";
       const lockScreen = document.getElementById('lockScreen');
       const valentineDiv = document.getElementById('valentineContent');
       const unlockBtn = document.getElementById('unlockBtn');
       const passwordInput = document.getElementById('passwordInput');
 
-      // Make sure valentine is hidden initially
       valentineDiv.style.display = 'none';
       
       unlockBtn.addEventListener('click', function() {
@@ -370,18 +365,16 @@
       });
 
       passwordInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          unlockBtn.click();
-        }
+        if (e.key === 'Enter') unlockBtn.click();
       });
 
-      // ---------- THREE.JS – 3D HEART BACKGROUND (aesthetic) ----------
+      // ---------- THREE.JS – SUPER CUTE 3D HEARTS (proper heart shape!) ----------
       const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x1a0b0e); // deep romantic burgundy
+      scene.background = new THREE.Color(0x1a0b0e);
       
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.z = 20;
-      camera.position.y = 2;
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, 2, 25);
+      camera.lookAt(0, 0, 0);
       
       const renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -391,11 +384,10 @@
       document.body.appendChild(renderer.domElement);
       
       // --- LIGHTS ---
-      const ambientLight = new THREE.AmbientLight(0xffccdd);
-      ambientLight.intensity = 0.6;
+      const ambientLight = new THREE.AmbientLight(0xffaacc, 0.6);
       scene.add(ambientLight);
       
-      const mainLight = new THREE.PointLight(0xffa5b0, 1.5);
+      const mainLight = new THREE.PointLight(0xffa5b0, 1.2);
       mainLight.position.set(10, 10, 20);
       mainLight.castShadow = true;
       mainLight.receiveShadow = true;
@@ -405,88 +397,97 @@
       backLight.position.set(-10, 0, -20);
       scene.add(backLight);
       
-      const fillLight = new THREE.PointLight(0xffb6c1, 0.6);
-      fillLight.position.set(0, -5, 15);
+      const fillLight = new THREE.PointLight(0xffb6c1, 0.7);
+      fillLight.position.set(5, -5, 15);
       scene.add(fillLight);
       
-      // --- CREATE FLOATING 3D HEARTS ---
-      function createHeart(color, size, x, y, z) {
+      // --- CUTE HEART SHAPE using LatheGeometry (proper valentine heart) ---
+      function createCuteHeart(color, size, x, y, z) {
         const group = new THREE.Group();
         
-        const sphereMat = new THREE.MeshStandardMaterial({
+        // Heart shape points (classic heart curve)
+        const points = [];
+        for (let t = 0; t <= Math.PI * 2; t += 0.1) {
+          // Parametric equation for heart
+          const xp = 16 * Math.pow(Math.sin(t), 3);
+          const yp = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+          points.push(new THREE.Vector2(xp * 0.06, yp * 0.06)); // scaled down
+        }
+        
+        const heartGeometry = new THREE.LatheGeometry(points, 24);
+        const heartMaterial = new THREE.MeshStandardMaterial({
           color: color,
           emissive: new THREE.Color(0x550033),
           emissiveIntensity: 0.3,
-          roughness: 0.3,
+          roughness: 0.25,
           metalness: 0.1,
           transparent: true,
-          opacity: 0.92
+          opacity: 0.9,
+          side: THREE.DoubleSide
         });
         
-        const sphereGeom = new THREE.SphereGeometry(size * 0.7, 32, 16);
+        const heartMesh = new THREE.Mesh(heartGeometry, heartMaterial);
+        heartMesh.rotation.x = Math.PI / 2;
+        heartMesh.rotation.z = Math.PI;
+        heartMesh.scale.set(size, size, size);
         
-        const leftSphere = new THREE.Mesh(sphereGeom, sphereMat);
-        leftSphere.position.x = -size * 0.7;
-        leftSphere.position.y = size * 0.3;
-        group.add(leftSphere);
-        
-        const rightSphere = new THREE.Mesh(sphereGeom, sphereMat);
-        rightSphere.position.x = size * 0.7;
-        rightSphere.position.y = size * 0.3;
-        group.add(rightSphere);
-        
-        const coneMat = new THREE.MeshStandardMaterial({
-          color: color,
-          emissive: new THREE.Color(0x440022),
-          emissiveIntensity: 0.3,
-          roughness: 0.4,
-          metalness: 0.1,
+        // Add a shiny highlight
+        const highlightMat = new THREE.MeshStandardMaterial({
+          color: 0xfff0f5,
+          emissive: 0xffaabb,
+          emissiveIntensity: 0.2,
           transparent: true,
-          opacity: 0.95
+          opacity: 0.3
         });
-        const coneGeom = new THREE.ConeGeometry(size * 0.7, size * 1.2, 32);
-        const cone = new THREE.Mesh(coneGeom, coneMat);
-        cone.rotation.x = Math.PI;
-        cone.position.y = -size * 0.5;
-        group.add(cone);
+        const highlightSphere = new THREE.Mesh(new THREE.SphereGeometry(size * 0.2, 16, 16), highlightMat);
+        highlightSphere.position.set(size * 0.3, size * 0.4, size * 0.3);
+        heartMesh.add(highlightSphere);
         
-        const highlight = new THREE.Mesh(
-          new THREE.SphereGeometry(size * 0.15, 16, 16),
-          new THREE.MeshStandardMaterial({ color: 0xfff0f5, emissive: 0xffaabb, emissiveIntensity: 0.4 })
+        group.add(heartMesh);
+        
+        // Add a glowing edge outline
+        const edgeGeometry = new THREE.EdgesGeometry(heartGeometry);
+        const edgeLines = new THREE.LineSegments(
+          edgeGeometry,
+          new THREE.LineBasicMaterial({ color: 0xffeef2 })
         );
-        highlight.position.y = size * 0.9;
-        highlight.position.x = 0;
-        group.add(highlight);
+        edgeLines.rotation.copy(heartMesh.rotation);
+        edgeLines.scale.copy(heartMesh.scale);
+        group.add(edgeLines);
         
         group.position.set(x, y, z);
-        group.rotation.z = Math.random() * Math.PI * 2;
-        group.rotation.x = (Math.random() - 0.5) * 0.5;
-        group.rotation.y = (Math.random() - 0.5) * 0.5;
+        
+        // Random rotation
+        group.rotation.x = Math.random() * Math.PI;
+        group.rotation.y = Math.random() * Math.PI;
+        group.rotation.z = Math.random() * Math.PI;
         
         return group;
       }
       
-      const heartColors = [0xffa5b0, 0xff809a, 0xff6f8f, 0xff5e7c, 0xff4d6d, 0xffa07a, 0xffb3c6, 0xffc0cb];
+      // --- CREATE LOTS OF CUTE FLOATING HEARTS ---
+      const heartColors = [0xff9aad, 0xff809a, 0xff6f8f, 0xff5e7c, 0xff4d6d, 0xffa5b0, 0xffb3c6, 0xffc0cb, 0xffb7c5, 0xffa7b9];
       
       const heartsGroup = new THREE.Group();
-      const heartCount = 45;
+      const heartCount = 60; // more hearts!
       
       for (let i = 0; i < heartCount; i++) {
         const color = heartColors[Math.floor(Math.random() * heartColors.length)];
-        const size = Math.random() * 0.8 + 0.4;
+        const size = Math.random() * 0.4 + 0.25; // smaller, cuter size
         const x = (Math.random() - 0.5) * 70;
-        const y = (Math.random() - 0.5) * 50;
-        const z = (Math.random() - 0.5) * 60 - 20;
-        const heart = createHeart(color, size, x, y, z);
+        const y = (Math.random() - 0.5) * 60;
+        const z = (Math.random() - 0.5) * 80 - 30;
+        
+        const heart = createCuteHeart(color, size, x, y, z);
         
         heart.userData = {
-          speedX: (Math.random() - 0.5) * 0.02,
-          speedY: (Math.random() - 0.5) * 0.02 + 0.005,
+          speedX: (Math.random() - 0.5) * 0.015,
+          speedY: (Math.random() - 0.5) * 0.015 + 0.008,
           speedZ: (Math.random() - 0.5) * 0.01,
-          rotSpeed: (Math.random() - 0.5) * 0.01,
-          baseX: x,
-          baseY: y,
-          baseZ: z
+          rotSpeedX: (Math.random() - 0.5) * 0.01,
+          rotSpeedY: (Math.random() - 0.5) * 0.01,
+          rotSpeedZ: (Math.random() - 0.5) * 0.01,
+          floatOffset: Math.random() * 100
         };
         
         heartsGroup.add(heart);
@@ -494,105 +495,128 @@
       
       scene.add(heartsGroup);
       
+      // --- SPARKLES ---
       const sparkleGroup = new THREE.Group();
-      for (let i = 0; i < 200; i++) {
-        const geom = new THREE.SphereGeometry(0.06, 6, 6);
+      for (let i = 0; i < 300; i++) {
+        const geom = new THREE.SphereGeometry(0.05, 4, 4);
         const mat = new THREE.MeshStandardMaterial({ 
           color: 0xffddee, 
           emissive: 0xff8aa1, 
-          emissiveIntensity: 0.5,
+          emissiveIntensity: 0.6,
           transparent: true,
-          opacity: 0.8
+          opacity: 0.9
         });
         const spark = new THREE.Mesh(geom, mat);
-        spark.position.x = (Math.random() - 0.5) * 100;
-        spark.position.y = (Math.random() - 0.5) * 80;
-        spark.position.z = (Math.random() - 0.5) * 100 - 30;
+        spark.position.x = (Math.random() - 0.5) * 120;
+        spark.position.y = (Math.random() - 0.5) * 100;
+        spark.position.z = (Math.random() - 0.5) * 120 - 30;
         spark.userData = {
-          speedY: Math.random() * 0.01 + 0.005,
+          speedY: Math.random() * 0.015 + 0.005,
           baseY: spark.position.y
         };
         sparkleGroup.add(spark);
       }
       scene.add(sparkleGroup);
       
-      scene.fog = new THREE.FogExp2(0x1a0b0e, 0.02);
+      scene.fog = new THREE.FogExp2(0x1a0b0e, 0.015);
       
-      // ---- HEART SHOWER (for YES celebration) ----
+      // ---- HEART SHOWER (for YES celebration) - super cute falling hearts! ----
       const showerHearts = [];
       function createShowerHeart() {
         const color = heartColors[Math.floor(Math.random() * heartColors.length)];
-        const size = Math.random() * 0.6 + 0.3;
-        const heart = createHeart(color, size, 0, 0, 0);
-        heart.position.x = (Math.random() - 0.5) * 60;
-        heart.position.y = 40 + Math.random() * 30;
-        heart.position.z = (Math.random() - 0.5) * 50 - 10;
+        const size = Math.random() * 0.3 + 0.2;
+        const heart = createCuteHeart(color, size, 0, 0, 0);
+        heart.position.x = (Math.random() - 0.5) * 80;
+        heart.position.y = 50 + Math.random() * 40;
+        heart.position.z = (Math.random() - 0.5) * 60 - 10;
         heart.userData = {
-          velocityY: -Math.random() * 0.2 - 0.15,
-          velocityX: (Math.random() - 0.5) * 0.05,
-          velocityZ: (Math.random() - 0.5) * 0.05,
-          rotSpeed: (Math.random() - 0.5) * 0.03,
-          initialY: 40 + Math.random() * 30
+          velocityY: -Math.random() * 0.18 - 0.12,
+          velocityX: (Math.random() - 0.5) * 0.03,
+          velocityZ: (Math.random() - 0.5) * 0.03,
+          rotSpeedX: (Math.random() - 0.5) * 0.02,
+          rotSpeedY: (Math.random() - 0.5) * 0.02,
+          rotSpeedZ: (Math.random() - 0.5) * 0.02
         };
         return heart;
       }
       
       window.startHeartShower = function() {
-        for (let i = 0; i < 60; i++) {
+        // Add 80 falling hearts
+        for (let i = 0; i < 80; i++) {
           const h = createShowerHeart();
           showerHearts.push(h);
           scene.add(h);
         }
         
-        for (let i = 0; i < 100; i++) {
-          const geom = new THREE.SphereGeometry(0.1, 4, 4);
-          const mat = new THREE.MeshStandardMaterial({ color: 0xffb3c6, emissive: 0xff4d6d, emissiveIntensity: 0.4 });
+        // Add kiss particles
+        for (let i = 0; i < 150; i++) {
+          const geom = new THREE.SphereGeometry(0.08, 6, 6);
+          const mat = new THREE.MeshStandardMaterial({ 
+            color: 0xffb3c6, 
+            emissive: 0xff4d6d, 
+            emissiveIntensity: 0.5,
+            transparent: true,
+            opacity: 0.9
+          });
           const kiss = new THREE.Mesh(geom, mat);
-          kiss.position.x = (Math.random() - 0.5) * 80;
-          kiss.position.y = (Math.random() - 0.5) * 60 + 40;
-          kiss.position.z = (Math.random() - 0.5) * 60 - 10;
-          kiss.userData = { velocityY: -Math.random() * 0.25 - 0.2 };
+          kiss.position.x = (Math.random() - 0.5) * 90;
+          kiss.position.y = 60 + Math.random() * 50;
+          kiss.position.z = (Math.random() - 0.5) * 70 - 10;
+          kiss.userData = { 
+            velocityY: -Math.random() * 0.22 - 0.15,
+            velocityX: (Math.random() - 0.5) * 0.04,
+            velocityZ: (Math.random() - 0.5) * 0.04
+          };
           showerHearts.push(kiss);
           scene.add(kiss);
         }
       };
       
+      // --- ANIMATION LOOP ---
       function animate() {
         requestAnimationFrame(animate);
         
+        // Gentle floating hearts
         heartsGroup.children.forEach((heart) => {
           if (heart.userData) {
             heart.position.x += heart.userData.speedX;
             heart.position.y += heart.userData.speedY;
             heart.position.z += heart.userData.speedZ;
-            heart.rotation.y += heart.userData.rotSpeed;
-            heart.rotation.x += heart.userData.rotSpeed * 0.5;
             
-            if (heart.position.y > 35) heart.position.y = -25;
-            if (heart.position.y < -30) heart.position.y = 30;
+            heart.rotation.x += heart.userData.rotSpeedX;
+            heart.rotation.y += heart.userData.rotSpeedY;
+            heart.rotation.z += heart.userData.rotSpeedZ;
+            
+            // Wrap around boundaries
+            if (heart.position.y > 40) heart.position.y = -35;
+            if (heart.position.y < -40) heart.position.y = 35;
             if (heart.position.x > 45) heart.position.x = -45;
             if (heart.position.x < -45) heart.position.x = 45;
-            if (heart.position.z > 40) heart.position.z = -40;
-            if (heart.position.z < -60) heart.position.z = 20;
+            if (heart.position.z > 40) heart.position.z = -50;
+            if (heart.position.z < -70) heart.position.z = 30;
           }
         });
         
+        // Sparkle float
         sparkleGroup.children.forEach((spark) => {
           spark.position.y += spark.userData.speedY;
-          if (spark.position.y > 50) spark.position.y = -40;
+          if (spark.position.y > 60) spark.position.y = -50;
         });
         
+        // Shower hearts animation
         showerHearts.forEach((item) => {
           if (item.userData) {
             item.position.y += item.userData.velocityY;
             item.position.x += item.userData.velocityX || 0;
             item.position.z += item.userData.velocityZ || 0;
-            item.rotation.x += 0.02;
-            item.rotation.z += 0.03;
             
-            if (item.position.y < -40) {
-              item.position.y = 50 + Math.random() * 30;
-              item.position.x = (Math.random() - 0.5) * 70;
+            item.rotation.x += item.userData.rotSpeedX || 0.01;
+            item.rotation.y += item.userData.rotSpeedY || 0.01;
+            item.rotation.z += item.userData.rotSpeedZ || 0.01;
+            
+            if (item.position.y < -50) {
+              item.position.y = 60 + Math.random() * 40;
+              item.position.x = (Math.random() - 0.5) * 80;
               item.position.z = (Math.random() - 0.5) * 60;
             }
           }
@@ -626,7 +650,8 @@
         
         noBtn.style.display = 'none';
         
-        for (let i = 0; i < 30; i++) {
+        // 2D kiss shower
+        for (let i = 0; i < 40; i++) {
           const kiss = document.createElement('span');
           kiss.innerText = '💋';
           kiss.style.position = 'fixed';
@@ -639,7 +664,7 @@
           kiss.style.animation = `floatKiss ${Math.random() * 4 + 3}s infinite`;
           document.body.appendChild(kiss);
           
-          setTimeout(() => { kiss.remove(); }, 5000);
+          setTimeout(() => { kiss.remove(); }, 6000);
         }
       });
 
@@ -665,8 +690,8 @@
         const maxX = container.width * 0.35;
         const maxY = container.height * 0.3;
         
-        let deltaX = (Math.random() * 300 + 150) * (Math.random() < 0.5 ? 1 : -1);
-        let deltaY = (Math.random() * 250 + 120) * (Math.random() < 0.5 ? 1 : -1);
+        let deltaX = (Math.random() * 350 + 180) * (Math.random() < 0.5 ? 1 : -1);
+        let deltaY = (Math.random() * 300 + 150) * (Math.random() < 0.5 ? 1 : -1);
         
         let newLeft = currentLeft + deltaX;
         let newTop = currentTop + deltaY;
@@ -690,11 +715,12 @@
         alert('😘 nice try! you cannot catch NO!');
       });
 
+      // Add CSS for floating kisses
       const styleSheet = document.createElement("style");
       styleSheet.innerHTML = `
         @keyframes floatKiss {
           0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-          100% { transform: translateY(-200px) rotate(30deg); opacity: 0; }
+          100% { transform: translateY(-300px) rotate(40deg); opacity: 0; }
         }
       `;
       document.head.appendChild(styleSheet);
