@@ -2,25 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>💗 3D Valentine · BB Piru 💗</title>
   
   <!-- Three.js library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
   <!-- Font & basic styling -->
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
+    /* WARMTH & LOVE EVERYWHERE */
     body {
       margin: 0;
       overflow: hidden;
       font-family: 'Quicksand', sans-serif;
-      background-color: #1a0b0e;
-      color: white;
+      background: radial-gradient(circle at 30% 30%, #2a0f15, #14080a);
+      color: #fff9fb;
     }
     
-    /* Canvas fills background */
     canvas {
       display: block;
       position: fixed;
@@ -29,9 +29,9 @@
       width: 100vw;
       height: 100vh;
       z-index: 0;
+      opacity: 0.95;
     }
     
-    /* Everything is layered above canvas */
     .content {
       position: relative;
       z-index: 10;
@@ -40,7 +40,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
       box-sizing: border-box;
       pointer-events: none;
     }
@@ -49,52 +49,52 @@
       pointer-events: auto;
     }
     
-    /* ---------- LOCK SCREEN — no hint, no placeholder ---------- */
+    /* ---------- LOCK SCREEN — cozy, warm, reduced size ---------- */
     .lock-screen {
-      background: rgba(25, 12, 20, 0.75);
-      backdrop-filter: blur(16px) brightness(1.2);
-      -webkit-backdrop-filter: blur(16px) brightness(1.2);
-      border-radius: 70px 70px 70px 70px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 0 3px rgba(255, 200, 220, 0.5), 0 0 30px #ff99aa;
-      padding: 3rem 2.8rem;
-      max-width: 500px;
+      background: rgba(35, 15, 20, 0.8);
+      backdrop-filter: blur(20px) brightness(1.3);
+      -webkit-backdrop-filter: blur(20px) brightness(1.3);
+      border-radius: 48px 48px 48px 48px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 2px rgba(255, 200, 210, 0.7), 0 0 40px #ff809a;
+      padding: 2.2rem 2rem;
+      max-width: 440px;
       width: 100%;
       text-align: center;
-      border: 2px solid rgba(255, 170, 200, 0.7);
+      border: 1px solid rgba(255, 200, 220, 0.8);
       transition: 0.3s;
     }
     
     .lock-screen h1 {
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       font-weight: 800;
-      color: #ffe3ec;
-      text-shadow: 0 0 12px #ff5e7c, 0 0 30px #ffb6c1, 4px 4px 0 #882d4a;
-      margin-bottom: 30px;
-      letter-spacing: 6px;
+      color: #ffe9ee;
+      text-shadow: 0 0 10px #ff5e7c, 0 0 25px #ffb6c1, 3px 3px 0 #712c3a;
+      margin-bottom: 20px;
+      letter-spacing: 4px;
     }
     
     .password-box {
-      background: rgba(30, 10, 18, 0.7);
-      border-radius: 100px;
-      padding: 6px 6px 6px 30px;
+      background: rgba(30, 12, 18, 0.8);
+      border-radius: 60px;
+      padding: 4px 4px 4px 20px;
       display: flex;
       align-items: center;
-      border: 3px solid #ff90a8;
-      box-shadow: inset 0 0 15px #ff3b6f, 0 8px 0 #6b2e3e, 0 12px 30px black;
-      margin: 30px 0 20px;
+      border: 2px solid #ff9eb2;
+      box-shadow: inset 0 0 10px #ff3b6f, 0 6px 0 #57232e, 0 10px 20px black;
+      margin: 20px 0 16px;
     }
     
     .password-box input {
       flex: 1;
       border: none;
       background: transparent;
-      padding: 18px 5px;
-      font-size: 1.3rem;
+      padding: 14px 5px;
+      font-size: 1.1rem;
       font-family: 'Quicksand', sans-serif;
       font-weight: 600;
-      color: #fff0f2;
+      color: #ffecf0;
       outline: none;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
     }
     
     .password-box input::placeholder {
@@ -102,201 +102,233 @@
     }
     
     .btn-unlock {
-      background: #ff4d6d;
+      background: #ff5a7a;
       border: none;
-      border-radius: 60px;
-      padding: 18px 42px;
+      border-radius: 50px;
+      padding: 14px 32px;
       color: white;
-      font-size: 1.6rem;
+      font-size: 1.3rem;
       font-weight: 800;
-      letter-spacing: 6px;
-      border: 4px solid #fff5f7;
-      box-shadow: 0 12px 0 #712c3a, 0 15px 30px #00000060;
+      letter-spacing: 4px;
+      border: 3px solid #fff5f7;
+      box-shadow: 0 8px 0 #5e2a34, 0 12px 25px #00000070;
       cursor: pointer;
-      transition: 0.07s linear;
+      transition: 0.06s linear;
       display: inline-flex;
       align-items: center;
-      gap: 15px;
-      text-shadow: 2px 2px 0 #4a1e26;
+      gap: 10px;
+      text-shadow: 2px 2px 0 #3f1e25;
     }
     
     .btn-unlock:active {
-      transform: translateY(12px);
-      box-shadow: 0 3px 0 #712c3a, 0 15px 30px black;
+      transform: translateY(8px);
+      box-shadow: 0 2px 0 #5e2a34, 0 12px 25px black;
     }
     
-    /* ---------- VALENTINE CARD — super cute ---------- */
+    /* ---------- VALENTINE CARD — perfectly sized for phone, WARM ---------- */
     .valentine-container {
       display: none;
       position: relative;
-      max-width: 900px;
+      max-width: 560px;
       width: 100%;
-      background: rgba(40, 15, 25, 0.6);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border-radius: 100px 100px 100px 100px;
-      padding: 3.5rem 3rem;
-      box-shadow: 0 40px 70px rgba(0,0,0,0.7), 0 0 0 6px rgba(255, 160, 190, 0.7), 0 0 60px #ff7a9e;
-      border: 2px solid rgba(255, 220, 240, 0.9);
+      background: rgba(45, 20, 28, 0.7);
+      backdrop-filter: blur(20px) saturate(200%);
+      -webkit-backdrop-filter: blur(20px) saturate(200%);
+      border-radius: 56px 56px 56px 56px;
+      padding: 2.2rem 1.8rem;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.6), 0 0 0 4px rgba(255, 160, 180, 0.8), 0 0 70px #ff5f7f;
+      border: 1px solid rgba(255, 220, 230, 0.9);
       text-align: center;
-      animation: floatIn 0.8s cubic-bezier(0.22, 1.2, 0.36, 1);
+      animation: floatIn 0.7s cubic-bezier(0.2, 1.1, 0.4, 1);
     }
     
     @keyframes floatIn {
-      0% { opacity: 0; transform: scale(0.7) translateY(60px); }
+      0% { opacity: 0; transform: scale(0.8) translateY(40px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
     
     .heart-deco {
-      font-size: 4rem;
+      font-size: 2.8rem;
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 0 20px crimson);
+      gap: 12px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 20px #ff4d6a);
     }
     
     .big-question {
-      font-size: 3.8rem;
+      font-size: 2.4rem;
       font-weight: 800;
-      color: #fff5f5;
-      text-shadow: 6px 6px 0 #b32e4a, 0 0 30px #ffb6b6;
-      margin: 10px 0 5px;
+      color: #fff5f7;
+      text-shadow: 4px 4px 0 #9f3a4a, 0 0 25px #ffa5b0;
+      margin: 5px 0 0px;
       line-height: 1.2;
     }
     
     .bb-piru {
-      background: linear-gradient(45deg, #ffd3dc, #ffe6f0);
+      background: linear-gradient(145deg, #ffdee6, #fff0f5);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow: 0 0 30px #ff9eb5, 0 0 60px #ff3b6f;
-      font-size: 4.2rem;
+      text-shadow: 0 0 30px #ff859c, 0 0 70px #ff3b6f;
+      font-size: 2.8rem;
       display: inline-block;
       font-weight: 900;
-      letter-spacing: 6px;
+      letter-spacing: 3px;
+      margin-top: -5px;
     }
     
     .cute-extra {
-      font-size: 2rem;
-      background: rgba(255, 140, 170, 0.5);
-      padding: 12px 24px;
-      border-radius: 100px;
+      font-size: 1.5rem;
+      background: rgba(255, 130, 160, 0.6);
+      padding: 10px 20px;
+      border-radius: 80px;
       display: inline-block;
-      margin: 20px auto 10px;
-      border: 4px dashed #fff2f2;
-      backdrop-filter: blur(8px);
-      color: #fff8ed;
+      margin: 16px auto 8px;
+      border: 3px dashed #ffe9ef;
+      backdrop-filter: blur(12px);
+      color: #fff9fb;
       font-weight: 700;
+      box-shadow: 0 0 30px #ff95a8;
     }
     
     .button-pair {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 70px;
-      margin-top: 50px;
+      gap: 30px;
+      margin-top: 30px;
       flex-wrap: wrap;
       position: relative;
     }
     
     .yes-btn {
-      background: #ff3b5c;
-      border: 8px solid #ffeef2;
+      background: #ff3f62;
+      border: 5px solid #ffeef2;
       color: white;
-      font-size: 2.8rem;
+      font-size: 2rem;
       font-weight: 900;
-      padding: 20px 50px;
-      border-radius: 200px;
-      box-shadow: 0 18px 0 #712c3a, 0 20px 50px #ff4d6d;
+      padding: 14px 36px;
+      border-radius: 160px;
+      box-shadow: 0 12px 0 #632b36, 0 15px 40px #ff3f62;
       cursor: pointer;
-      transition: 0.08s ease;
-      letter-spacing: 10px;
+      transition: 0.1s ease;
+      letter-spacing: 6px;
       display: flex;
       align-items: center;
-      gap: 15px;
-      text-shadow: 4px 4px 0 #4a1e2c;
+      gap: 10px;
+      text-shadow: 3px 3px 0 #3f1e25;
     }
     
-    /* YES BUTTON HOVER HIGHLIGHT - super cute */
     .yes-btn:hover {
-      background: #ff1a4c;
-      transform: scale(1.1);
-      box-shadow: 0 18px 0 #712c3a, 0 0 30px #ffb6c1, 0 0 80px #ff4d6d;
-      border-color: #fff9fb;
-      text-shadow: 4px 4px 0 #4a1e2c, 0 0 20px white;
+      background: #ff1f4a;
+      transform: scale(1.08);
+      box-shadow: 0 12px 0 #632b36, 0 0 30px #ffa5b0, 0 0 70px #ff4d6d;
+      border-color: #ffffff;
+      text-shadow: 3px 3px 0 #3f1e25, 0 0 20px white;
     }
     
     .yes-btn:active {
-      transform: translateY(18px);
-      box-shadow: 0 5px 0 #712c3a, 0 20px 50px #ff4d6d;
+      transform: translateY(12px);
+      box-shadow: 0 3px 0 #632b36, 0 15px 40px #ff3f62;
     }
     
     .no-btn {
-      background: #594651;
-      border: 6px solid #ffd9e2;
-      color: #ffecf0;
-      font-size: 2.5rem;
+      background: #634a55;
+      border: 4px solid #ffe2e8;
+      color: #fff2f5;
+      font-size: 1.8rem;
       font-weight: 800;
-      padding: 18px 46px;
-      border-radius: 200px;
-      box-shadow: 0 14px 0 #38262e, 0 20px 40px #1a1113;
+      padding: 12px 32px;
+      border-radius: 160px;
+      box-shadow: 0 10px 0 #3a2a30, 0 15px 30px #1e1316;
       cursor: pointer;
       transition: 0.02s linear;
-      letter-spacing: 8px;
+      letter-spacing: 5px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       position: relative;
-      text-shadow: 2px 2px 0 #2d1e23;
+      text-shadow: 2px 2px 0 #2a1c20;
     }
     
-    /* celebration area — hidden until YES */
     .thank-you-message {
-      margin-top: 40px;
-      font-size: 2.5rem;
-      background: rgba(255, 215, 220, 0.85);
+      margin-top: 30px;
+      font-size: 1.8rem;
+      background: rgba(255, 210, 220, 0.9);
       backdrop-filter: blur(20px);
-      padding: 25px 30px;
-      border-radius: 120px;
-      color: #9f2b46;
+      padding: 18px 20px;
+      border-radius: 80px;
+      color: #942d45;
       font-weight: 900;
       display: none;
-      border: 8px solid white;
-      box-shadow: 0 0 60px hotpink;
-      text-shadow: 2px 2px 0 white;
-      letter-spacing: 2px;
-      animation: shimmer 2s infinite alternate;
+      border: 5px solid white;
+      box-shadow: 0 0 50px #ff99aa;
+      text-shadow: 1px 1px 0 white;
+      letter-spacing: 1px;
+      animation: warmShimmer 2s infinite alternate;
     }
     
-    @keyframes shimmer {
-      0% { box-shadow: 0 0 30px #ff8da1, 0 0 60px white; }
-      100% { box-shadow: 0 0 60px #ffc0cb, 0 0 100px #ffb3c6; }
+    @keyframes warmShimmer {
+      0% { box-shadow: 0 0 25px #ffa5b0, 0 0 50px white; }
+      100% { box-shadow: 0 0 50px #ffb6c1, 0 0 90px #ffa5b0; }
     }
     
     .show-thanks {
       display: block;
     }
     
-    @media (max-width: 700px) {
-      .lock-screen { padding: 2rem; }
-      .big-question { font-size: 2.8rem; }
-      .bb-piru { font-size: 3.2rem; }
-      .yes-btn { font-size: 2rem; padding: 16px 30px; }
-      .no-btn { font-size: 1.8rem; padding: 14px 30px; }
+    /* ----- PHONE OPTIMIZED (smaller everything) ----- */
+    @media (max-width: 500px) {
+      .lock-screen { padding: 1.8rem 1.5rem; border-radius: 40px; }
+      .lock-screen h1 { font-size: 2rem; }
+      .btn-unlock { font-size: 1.2rem; padding: 12px 24px; }
+      
+      .valentine-container { padding: 1.8rem 1.2rem; border-radius: 48px; }
+      .big-question { font-size: 2rem; }
+      .bb-piru { font-size: 2.3rem; }
+      .cute-extra { font-size: 1.3rem; padding: 8px 16px; }
+      .yes-btn { font-size: 1.6rem; padding: 12px 26px; }
+      .no-btn { font-size: 1.4rem; padding: 10px 24px; }
+      .thank-you-message { font-size: 1.5rem; }
+    }
+    
+    @media (max-width: 380px) {
+      .lock-screen { padding: 1.5rem 1.2rem; }
+      .big-question { font-size: 1.8rem; }
+      .bb-piru { font-size: 2rem; }
+      .yes-btn { font-size: 1.4rem; padding: 10px 20px; }
+      .no-btn { font-size: 1.2rem; padding: 8px 20px; }
+      .button-pair { gap: 20px; }
+    }
+    
+    /* extra love: floating warm emojis */
+    .floating-love {
+      position: fixed;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0.6;
+      animation: floatLove 10s infinite ease-in-out;
+      font-size: 2rem;
+    }
+    
+    @keyframes floatLove {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+      50% { transform: translateY(-40px) rotate(15deg); opacity: 0.7; }
+      100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Three.js canvas automatically inserted -->
+  <!-- 3D Canvas inserted here -->
 
   <!-- UI overlay -->
   <div class="content">
-    <!-- 🔐 PASSWORD SCREEN — no hint, no placeholder -->
+    <!-- 🔐 PASSWORD SCREEN — no hint, cozy size -->
     <div id="lockScreen" class="lock-screen">
       <h1>💘 secret 💘</h1>
-      <div style="font-size: 2.8rem; margin-bottom: 20px;">🐻✨🍰</div>
+      <div style="font-size: 2.2rem; margin-bottom: 10px;">🐻🍰✨</div>
       <div class="password-box">
         <input type="password" id="passwordInput" placeholder="" autofocus>
       </div>
@@ -305,10 +337,10 @@
       </button>
     </div>
 
-    <!-- 💖 VALENTINE PROPOSAL (hidden at start) -->
+    <!-- 💖 VALENTINE PROPOSAL — warm, intimate, phone-friendly -->
     <div id="valentineContent" class="valentine-container">
       <div class="heart-deco">
-        💗 💖 💘
+        💗 💖 💘 💞
       </div>
       <div class="big-question">
         Will you be my Valentine,
@@ -316,7 +348,6 @@
       <div class="bb-piru">
         BB Piru?
       </div>
-      <!-- Changed to "with extra kisses" -->
       <div class="cute-extra">
         🧸🌸 with extra kisses 🌸🧸
       </div>
@@ -331,10 +362,10 @@
         </button>
       </div>
 
-      <!-- THANK YOU MESSAGE – shown only after YES -->
+      <!-- THANK YOU MESSAGE – extra warm -->
       <div id="thankYouMessage" class="thank-you-message">
-        💗✨ Thank you for being my Valentine! ✨💗<br>
-        <span style="font-size: 2rem;">💋💋💋 🥰 🩷</span>
+        💗✨ Thank you, my love! ✨💗<br>
+        <span style="font-size: 1.8rem;">💋💋💋 🥰 💘</span>
       </div>
     </div>
   </div>
@@ -368,126 +399,126 @@
         if (e.key === 'Enter') unlockBtn.click();
       });
 
-      // ---------- THREE.JS – SUPER CUTE 3D HEARTS (proper heart shape!) ----------
+      // ---------- THREE.JS – CUTE, WARM, LOVELY 3D HEARTS (proper shape!) ----------
       const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x1a0b0e);
+      scene.background = new THREE.Color(0x1e0c12); // warm deep berry
       
-      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.set(0, 2, 25);
+      const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, 1.5, 22);
       camera.lookAt(0, 0, 0);
       
       const renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       document.body.appendChild(renderer.domElement);
       
-      // --- LIGHTS ---
-      const ambientLight = new THREE.AmbientLight(0xffaacc, 0.6);
+      // --- WARM LIGHTS ---
+      const ambientLight = new THREE.AmbientLight(0xffbbcc, 0.7);
       scene.add(ambientLight);
       
-      const mainLight = new THREE.PointLight(0xffa5b0, 1.2);
-      mainLight.position.set(10, 10, 20);
+      const mainLight = new THREE.PointLight(0xffa5b0, 1.3);
+      mainLight.position.set(8, 8, 18);
       mainLight.castShadow = true;
       mainLight.receiveShadow = true;
       scene.add(mainLight);
       
-      const backLight = new THREE.PointLight(0xff6f8f, 0.8);
-      backLight.position.set(-10, 0, -20);
+      const backLight = new THREE.PointLight(0xff7a93, 0.9);
+      backLight.position.set(-8, 2, -18);
       scene.add(backLight);
       
-      const fillLight = new THREE.PointLight(0xffb6c1, 0.7);
-      fillLight.position.set(5, -5, 15);
+      const fillLight = new THREE.PointLight(0xffb3c6, 0.8);
+      fillLight.position.set(5, -3, 12);
       scene.add(fillLight);
       
-      // --- CUTE HEART SHAPE using LatheGeometry (proper valentine heart) ---
-      function createCuteHeart(color, size, x, y, z) {
+      const topLight = new THREE.PointLight(0xff99aa, 0.5);
+      topLight.position.set(0, 15, 5);
+      scene.add(topLight);
+      
+      // --- PERFECT CUTE HEART SHAPE (LatheGeometry from heart curve) ---
+      function createWarmHeart(color, size, x, y, z) {
         const group = new THREE.Group();
         
-        // Heart shape points (classic heart curve)
+        // Classic heart curve points
         const points = [];
-        for (let t = 0; t <= Math.PI * 2; t += 0.1) {
-          // Parametric equation for heart
+        for (let t = 0; t <= Math.PI * 2; t += 0.08) {
           const xp = 16 * Math.pow(Math.sin(t), 3);
           const yp = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-          points.push(new THREE.Vector2(xp * 0.06, yp * 0.06)); // scaled down
+          points.push(new THREE.Vector2(xp * 0.055, yp * 0.055));
         }
         
-        const heartGeometry = new THREE.LatheGeometry(points, 24);
-        const heartMaterial = new THREE.MeshStandardMaterial({
+        const heartGeo = new THREE.LatheGeometry(points, 28);
+        const heartMat = new THREE.MeshStandardMaterial({
           color: color,
-          emissive: new THREE.Color(0x550033),
-          emissiveIntensity: 0.3,
-          roughness: 0.25,
+          emissive: new THREE.Color(0x5a1e2c),
+          emissiveIntensity: 0.35,
+          roughness: 0.28,
           metalness: 0.1,
           transparent: true,
-          opacity: 0.9,
-          side: THREE.DoubleSide
+          opacity: 0.92,
+          side: THREE.DoubleSide,
+          flatShading: false
         });
         
-        const heartMesh = new THREE.Mesh(heartGeometry, heartMaterial);
+        const heartMesh = new THREE.Mesh(heartGeo, heartMat);
         heartMesh.rotation.x = Math.PI / 2;
         heartMesh.rotation.z = Math.PI;
         heartMesh.scale.set(size, size, size);
         
-        // Add a shiny highlight
-        const highlightMat = new THREE.MeshStandardMaterial({
-          color: 0xfff0f5,
-          emissive: 0xffaabb,
-          emissiveIntensity: 0.2,
-          transparent: true,
-          opacity: 0.3
-        });
-        const highlightSphere = new THREE.Mesh(new THREE.SphereGeometry(size * 0.2, 16, 16), highlightMat);
-        highlightSphere.position.set(size * 0.3, size * 0.4, size * 0.3);
-        heartMesh.add(highlightSphere);
+        // Add glossy highlight
+        const highlight = new THREE.Mesh(
+          new THREE.SphereGeometry(size * 0.18, 12, 12),
+          new THREE.MeshStandardMaterial({ color: 0xfff5fa, emissive: 0xffa5b0, emissiveIntensity: 0.2 })
+        );
+        highlight.position.set(size * 0.25, size * 0.35, size * 0.25);
+        heartMesh.add(highlight);
         
         group.add(heartMesh);
         
-        // Add a glowing edge outline
-        const edgeGeometry = new THREE.EdgesGeometry(heartGeometry);
-        const edgeLines = new THREE.LineSegments(
-          edgeGeometry,
+        // Soft white edge lines
+        const edges = new THREE.EdgesGeometry(heartGeo);
+        const line = new THREE.LineSegments(
+          edges,
           new THREE.LineBasicMaterial({ color: 0xffeef2 })
         );
-        edgeLines.rotation.copy(heartMesh.rotation);
-        edgeLines.scale.copy(heartMesh.scale);
-        group.add(edgeLines);
+        line.rotation.copy(heartMesh.rotation);
+        line.scale.copy(heartMesh.scale);
+        group.add(line);
         
         group.position.set(x, y, z);
         
-        // Random rotation
-        group.rotation.x = Math.random() * Math.PI;
-        group.rotation.y = Math.random() * Math.PI;
-        group.rotation.z = Math.random() * Math.PI;
+        // random rotation for variety
+        group.rotation.x = Math.random() * Math.PI * 2;
+        group.rotation.y = Math.random() * Math.PI * 2;
+        group.rotation.z = Math.random() * Math.PI * 2;
         
         return group;
       }
       
-      // --- CREATE LOTS OF CUTE FLOATING HEARTS ---
-      const heartColors = [0xff9aad, 0xff809a, 0xff6f8f, 0xff5e7c, 0xff4d6d, 0xffa5b0, 0xffb3c6, 0xffc0cb, 0xffb7c5, 0xffa7b9];
+      // --- WARM COLOR PALETTE ---
+      const warmColors = [0xff8a9f, 0xff718a, 0xff617b, 0xff516c, 0xff4160, 0xff95a8, 0xffa5b0, 0xffb3bf, 0xffc0cb, 0xffa7b9];
       
       const heartsGroup = new THREE.Group();
-      const heartCount = 60; // more hearts!
+      const heartCount = 55;
       
       for (let i = 0; i < heartCount; i++) {
-        const color = heartColors[Math.floor(Math.random() * heartColors.length)];
-        const size = Math.random() * 0.4 + 0.25; // smaller, cuter size
+        const color = warmColors[Math.floor(Math.random() * warmColors.length)];
+        const size = Math.random() * 0.32 + 0.22;
         const x = (Math.random() - 0.5) * 70;
         const y = (Math.random() - 0.5) * 60;
-        const z = (Math.random() - 0.5) * 80 - 30;
+        const z = (Math.random() - 0.5) * 90 - 30;
         
-        const heart = createCuteHeart(color, size, x, y, z);
+        const heart = createWarmHeart(color, size, x, y, z);
         
         heart.userData = {
-          speedX: (Math.random() - 0.5) * 0.015,
-          speedY: (Math.random() - 0.5) * 0.015 + 0.008,
-          speedZ: (Math.random() - 0.5) * 0.01,
-          rotSpeedX: (Math.random() - 0.5) * 0.01,
-          rotSpeedY: (Math.random() - 0.5) * 0.01,
-          rotSpeedZ: (Math.random() - 0.5) * 0.01,
-          floatOffset: Math.random() * 100
+          speedX: (Math.random() - 0.5) * 0.012,
+          speedY: (Math.random() - 0.5) * 0.012 + 0.006,
+          speedZ: (Math.random() - 0.5) * 0.008,
+          rotX: (Math.random() - 0.5) * 0.008,
+          rotY: (Math.random() - 0.5) * 0.008,
+          rotZ: (Math.random() - 0.5) * 0.008,
+          offset: Math.random() * 100
         };
         
         heartsGroup.add(heart);
@@ -495,129 +526,126 @@
       
       scene.add(heartsGroup);
       
-      // --- SPARKLES ---
+      // --- WARM SPARKLES ---
       const sparkleGroup = new THREE.Group();
-      for (let i = 0; i < 300; i++) {
-        const geom = new THREE.SphereGeometry(0.05, 4, 4);
+      for (let i = 0; i < 350; i++) {
+        const geom = new THREE.SphereGeometry(0.045, 5, 5);
         const mat = new THREE.MeshStandardMaterial({ 
           color: 0xffddee, 
-          emissive: 0xff8aa1, 
-          emissiveIntensity: 0.6,
+          emissive: 0xff6f8f, 
+          emissiveIntensity: 0.5,
           transparent: true,
-          opacity: 0.9
+          opacity: 0.85
         });
         const spark = new THREE.Mesh(geom, mat);
-        spark.position.x = (Math.random() - 0.5) * 120;
-        spark.position.y = (Math.random() - 0.5) * 100;
-        spark.position.z = (Math.random() - 0.5) * 120 - 30;
+        spark.position.x = (Math.random() - 0.5) * 140;
+        spark.position.y = (Math.random() - 0.5) * 120;
+        spark.position.z = (Math.random() - 0.5) * 150 - 40;
         spark.userData = {
-          speedY: Math.random() * 0.015 + 0.005,
+          speedY: Math.random() * 0.012 + 0.004,
           baseY: spark.position.y
         };
         sparkleGroup.add(spark);
       }
       scene.add(sparkleGroup);
       
-      scene.fog = new THREE.FogExp2(0x1a0b0e, 0.015);
+      scene.fog = new THREE.FogExp2(0x1e0c12, 0.012);
       
-      // ---- HEART SHOWER (for YES celebration) - super cute falling hearts! ----
+      // ---- HEART SHOWER (for YES) - MORE LOVE! ----
       const showerHearts = [];
-      function createShowerHeart() {
-        const color = heartColors[Math.floor(Math.random() * heartColors.length)];
-        const size = Math.random() * 0.3 + 0.2;
-        const heart = createCuteHeart(color, size, 0, 0, 0);
-        heart.position.x = (Math.random() - 0.5) * 80;
-        heart.position.y = 50 + Math.random() * 40;
-        heart.position.z = (Math.random() - 0.5) * 60 - 10;
+      function createShowerHeartWarm() {
+        const color = warmColors[Math.floor(Math.random() * warmColors.length)];
+        const size = Math.random() * 0.28 + 0.18;
+        const heart = createWarmHeart(color, size, 0, 0, 0);
+        heart.position.x = (Math.random() - 0.5) * 90;
+        heart.position.y = 55 + Math.random() * 50;
+        heart.position.z = (Math.random() - 0.5) * 80 - 10;
         heart.userData = {
-          velocityY: -Math.random() * 0.18 - 0.12,
-          velocityX: (Math.random() - 0.5) * 0.03,
-          velocityZ: (Math.random() - 0.5) * 0.03,
-          rotSpeedX: (Math.random() - 0.5) * 0.02,
-          rotSpeedY: (Math.random() - 0.5) * 0.02,
-          rotSpeedZ: (Math.random() - 0.5) * 0.02
+          velocityY: -Math.random() * 0.16 - 0.1,
+          velocityX: (Math.random() - 0.5) * 0.04,
+          velocityZ: (Math.random() - 0.5) * 0.04,
+          rotX: (Math.random() - 0.5) * 0.02,
+          rotY: (Math.random() - 0.5) * 0.02,
+          rotZ: (Math.random() - 0.5) * 0.02
         };
         return heart;
       }
       
       window.startHeartShower = function() {
-        // Add 80 falling hearts
-        for (let i = 0; i < 80; i++) {
-          const h = createShowerHeart();
+        // 100 falling hearts
+        for (let i = 0; i < 100; i++) {
+          const h = createShowerHeartWarm();
           showerHearts.push(h);
           scene.add(h);
         }
         
-        // Add kiss particles
-        for (let i = 0; i < 150; i++) {
-          const geom = new THREE.SphereGeometry(0.08, 6, 6);
+        // 200 kiss particles
+        for (let i = 0; i < 200; i++) {
+          const geom = new THREE.SphereGeometry(0.07, 6, 6);
           const mat = new THREE.MeshStandardMaterial({ 
             color: 0xffb3c6, 
             emissive: 0xff4d6d, 
-            emissiveIntensity: 0.5,
+            emissiveIntensity: 0.6,
             transparent: true,
             opacity: 0.9
           });
           const kiss = new THREE.Mesh(geom, mat);
-          kiss.position.x = (Math.random() - 0.5) * 90;
-          kiss.position.y = 60 + Math.random() * 50;
-          kiss.position.z = (Math.random() - 0.5) * 70 - 10;
+          kiss.position.x = (Math.random() - 0.5) * 100;
+          kiss.position.y = 65 + Math.random() * 60;
+          kiss.position.z = (Math.random() - 0.5) * 90 - 15;
           kiss.userData = { 
-            velocityY: -Math.random() * 0.22 - 0.15,
-            velocityX: (Math.random() - 0.5) * 0.04,
-            velocityZ: (Math.random() - 0.5) * 0.04
+            velocityY: -Math.random() * 0.2 - 0.12,
+            velocityX: (Math.random() - 0.5) * 0.05,
+            velocityZ: (Math.random() - 0.5) * 0.05
           };
           showerHearts.push(kiss);
           scene.add(kiss);
         }
       };
       
-      // --- ANIMATION LOOP ---
+      // --- ANIMATION (gentle, warm) ---
       function animate() {
         requestAnimationFrame(animate);
         
-        // Gentle floating hearts
         heartsGroup.children.forEach((heart) => {
           if (heart.userData) {
             heart.position.x += heart.userData.speedX;
             heart.position.y += heart.userData.speedY;
             heart.position.z += heart.userData.speedZ;
             
-            heart.rotation.x += heart.userData.rotSpeedX;
-            heart.rotation.y += heart.userData.rotSpeedY;
-            heart.rotation.z += heart.userData.rotSpeedZ;
+            heart.rotation.x += heart.userData.rotX;
+            heart.rotation.y += heart.userData.rotY;
+            heart.rotation.z += heart.userData.rotZ;
             
-            // Wrap around boundaries
-            if (heart.position.y > 40) heart.position.y = -35;
-            if (heart.position.y < -40) heart.position.y = 35;
-            if (heart.position.x > 45) heart.position.x = -45;
-            if (heart.position.x < -45) heart.position.x = 45;
-            if (heart.position.z > 40) heart.position.z = -50;
-            if (heart.position.z < -70) heart.position.z = 30;
+            // soft wrap
+            if (heart.position.y > 45) heart.position.y = -40;
+            if (heart.position.y < -45) heart.position.y = 40;
+            if (heart.position.x > 50) heart.position.x = -50;
+            if (heart.position.x < -50) heart.position.x = 50;
+            if (heart.position.z > 40) heart.position.z = -60;
+            if (heart.position.z < -80) heart.position.z = 30;
           }
         });
         
-        // Sparkle float
         sparkleGroup.children.forEach((spark) => {
           spark.position.y += spark.userData.speedY;
-          if (spark.position.y > 60) spark.position.y = -50;
+          if (spark.position.y > 70) spark.position.y = -60;
         });
         
-        // Shower hearts animation
         showerHearts.forEach((item) => {
           if (item.userData) {
             item.position.y += item.userData.velocityY;
             item.position.x += item.userData.velocityX || 0;
             item.position.z += item.userData.velocityZ || 0;
             
-            item.rotation.x += item.userData.rotSpeedX || 0.01;
-            item.rotation.y += item.userData.rotSpeedY || 0.01;
-            item.rotation.z += item.userData.rotSpeedZ || 0.01;
+            item.rotation.x += item.userData.rotX || 0.01;
+            item.rotation.y += item.userData.rotY || 0.01;
+            item.rotation.z += item.userData.rotZ || 0.01;
             
-            if (item.position.y < -50) {
-              item.position.y = 60 + Math.random() * 40;
-              item.position.x = (Math.random() - 0.5) * 80;
-              item.position.z = (Math.random() - 0.5) * 60;
+            if (item.position.y < -60) {
+              item.position.y = 70 + Math.random() * 50;
+              item.position.x = (Math.random() - 0.5) * 90;
+              item.position.z = (Math.random() - 0.5) * 80;
             }
           }
         });
@@ -633,7 +661,7 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
       });
 
-      // ---------- VALENTINE INTERACTION: YES + RUNAWAY NO ----------
+      // ---------- YES + NO INTERACTION (with more love) ----------
       const yesBtn = document.getElementById('yesButton');
       const noBtn = document.getElementById('noButton');
       const thankYouMsg = document.getElementById('thankYouMessage');
@@ -643,32 +671,33 @@
         
         if (window.startHeartShower) window.startHeartShower();
         
-        yesBtn.style.transform = 'scale(1.3)';
+        yesBtn.style.transform = 'scale(1.2)';
         yesBtn.style.background = '#ff1a4c';
-        yesBtn.style.boxShadow = '0 18px 0 #4f1e28, 0 0 60px #ffb6c1';
+        yesBtn.style.boxShadow = '0 12px 0 #4f1e28, 0 0 70px #ffb6c1';
         yesBtn.innerHTML = '💖 YAY!!! 💖';
         
         noBtn.style.display = 'none';
         
-        // 2D kiss shower
-        for (let i = 0; i < 40; i++) {
+        // 2D floating kisses and hearts (extra love)
+        for (let i = 0; i < 60; i++) {
           const kiss = document.createElement('span');
-          kiss.innerText = '💋';
+          kiss.innerText = Math.random() > 0.5 ? '💋' : '❤️';
           kiss.style.position = 'fixed';
           kiss.style.left = Math.random() * 100 + '%';
           kiss.style.top = Math.random() * 100 + '%';
-          kiss.style.fontSize = (Math.random() * 40 + 30) + 'px';
-          kiss.style.opacity = Math.random() * 0.8 + 0.3;
+          kiss.style.fontSize = (Math.random() * 40 + 25) + 'px';
+          kiss.style.opacity = Math.random() * 0.7 + 0.3;
           kiss.style.zIndex = '9999';
           kiss.style.pointerEvents = 'none';
-          kiss.style.animation = `floatKiss ${Math.random() * 4 + 3}s infinite`;
+          kiss.style.animation = `floatKiss ${Math.random() * 5 + 4}s infinite`;
+          kiss.style.filter = 'drop-shadow(0 0 10px hotpink)';
           document.body.appendChild(kiss);
           
-          setTimeout(() => { kiss.remove(); }, 6000);
+          setTimeout(() => { kiss.remove(); }, 7000);
         }
       });
 
-      // ---------- RUNAWAY NO BUTTON ----------
+      // ---------- RUNAWAY NO (aggressive and funny) ----------
       noBtn.addEventListener('mouseenter', runaway);
       noBtn.addEventListener('mousemove', runaway);
       noBtn.addEventListener('touchstart', runawayTouch);
@@ -687,11 +716,11 @@
         let currentTop = parseFloat(noBtn.style.top) || 0;
         
         const container = valentineDiv.getBoundingClientRect();
-        const maxX = container.width * 0.35;
-        const maxY = container.height * 0.3;
+        const maxX = container.width * 0.3;
+        const maxY = container.height * 0.25;
         
-        let deltaX = (Math.random() * 350 + 180) * (Math.random() < 0.5 ? 1 : -1);
-        let deltaY = (Math.random() * 300 + 150) * (Math.random() < 0.5 ? 1 : -1);
+        let deltaX = (Math.random() * 300 + 200) * (Math.random() < 0.5 ? 1 : -1);
+        let deltaY = (Math.random() * 250 + 180) * (Math.random() < 0.5 ? 1 : -1);
         
         let newLeft = currentLeft + deltaX;
         let newTop = currentTop + deltaY;
@@ -712,15 +741,27 @@
       
       noBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        alert('😘 nice try! you cannot catch NO!');
+        alert('🥰 you almost caught it! but no means yes with you~');
       });
 
-      // Add CSS for floating kisses
+      // Extra love: floating warm emojis in background (2D)
+      for (let i = 0; i < 15; i++) {
+        const love = document.createElement('div');
+        love.className = 'floating-love';
+        love.style.left = Math.random() * 100 + '%';
+        love.style.top = Math.random() * 100 + '%';
+        love.style.animationDelay = (Math.random() * 10) + 's';
+        love.style.fontSize = (Math.random() * 30 + 20) + 'px';
+        love.innerText = ['🧸', '🌸', '🍰', '✨', '💗', '🐻', '🍓', '🐰'][Math.floor(Math.random() * 8)];
+        document.body.appendChild(love);
+      }
+
+      // Kiss float animation
       const styleSheet = document.createElement("style");
       styleSheet.innerHTML = `
         @keyframes floatKiss {
-          0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-          100% { transform: translateY(-300px) rotate(40deg); opacity: 0; }
+          0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+          100% { transform: translateY(-400px) rotate(30deg); opacity: 0; }
         }
       `;
       document.head.appendChild(styleSheet);
